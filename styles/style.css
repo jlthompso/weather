@@ -1,0 +1,33 @@
+#grid {
+    display: grid;
+    grid-template-columns: 150px 150px auto;
+    grid-auto-flow: column;
+    column-gap: 10px;
+    margin-top: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#unitsForm {
+    margin-left: 20px;
+}
+
+#flex {
+    display: flex;
+    align-items: center;
+}
+
+.wxData {
+    grid-column: 2;
+}
+
+.wxHeader {
+    grid-column: 1;
+    justify-self: end;
+    font-weight: bold;
+}
+
+#wxIcon {
+    grid-column: 3;
+    grid-row: 1 / span 8;
+    align-self: center;
+}

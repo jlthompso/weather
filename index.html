@@ -6,10 +6,37 @@
         <link href="./styles/style.css" rel="stylesheet">
     </head>
     <body>
-        <form>
-            <input type='text' placeholder="City Name">
-            <input type='submit' value='Current Weather'>
-        </form>
+        <div id="flex">
+            <form id="cityForm">
+                <input type="text" placeholder="City Name">
+                <input type="submit" value="Current Weather">
+            </form>
+            <form id="unitsForm">
+                <input type="radio" id="imperial" name="units" value="imperial">
+                <label for="imperial">Imperial Units</label><br>
+                <input type="radio" id="metric" name="units" value="metric">
+                <label for="metric">Metric Units</label>
+            </form>
+        </div>
+        <div id="grid">
+            <div class="wxHeader">City:</div>
+            <div class="wxHeader">Current Weather:</div>
+            <div class="wxHeader">Temperature:</div>
+            <div class="wxHeader">Feels Like:</div>
+            <div class="wxHeader">Relative Humidity:</div>
+            <div class="wxHeader">Wind Speed:</div>
+            <div class="wxHeader">Wind Direction:</div>
+
+            <div class="wxData">Maple Valley</div>
+            <div class="wxData">Clear</div>
+            <div class="wxData">295.54°F</div>
+            <div class="wxData">60°F</div>
+            <div class="wxData">40%</div>
+            <div class="wxData">4.1mph</div>
+            <div class="wxData">330°</div>
+
+            <img id="wxIcon" src="*">
+        </div>
         <script src="./scripts/main.js"></script>
     </body>
 </html>

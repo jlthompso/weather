@@ -1,20 +1,28 @@
 const OpenWeatherKey = '51cdbef27bd039d5afdb1422954ed64f'
 const giphyKey = 'M0wpQeQkmKv00tYxcHtuWwlg9rRkocfJ'
 
-let city = 'maple valley'
+let prevCity
+let currentCity = 'maple valley'
 let system = 'imperial'
 
-render()
+render(currentCity)
 
-document.querySelector('form').addEventListener('submit', e => {
+document.querySelector('#cityForm').addEventListener('submit', e => {
     e.preventDefault()
-    city = e.target[0].value
-    render()
+    prevCity = currentCity
+    currentCity = e.target[0].value
+    render(currentCity)
     e.target.reset()
 })
 
-function render () {
+document.querySelector('#unitsForm').addEventListener('change', e => {
+    system = e.target.value
+    render(currentCity)
+})
+
+function render (city) {
     getWeatherData(formatInput(city)).then(wxData => {
+        wxData === undefined ? currentCity = prevCity : prevCity = city
         let tempUnits, speedUnits
         switch (system) {
             case 'imperial':
@@ -29,12 +37,12 @@ function render () {
                 break
         }
         let cells = document.querySelectorAll('.wxData')
-        cells[0].innerHTML = titleCase(city)
+        cells[0].innerHTML = titleCase(currentCity)
         cells[1].innerHTML = wxData.main
-        cells[2].innerHTML = `${wxData.temp}${tempUnits}` // add units, conversion
-        cells[3].innerHTML = `${wxData.feels_like}${tempUnits}`
+        cells[2].innerHTML = `${Math.round(convertUnits(wxData.temp, 'kelvin', system === 'imperial' ? 'fahrenheit' : 'celsius'))}${tempUnits}`
+        cells[3].innerHTML = `${Math.round(convertUnits(wxData.feels_like, 'kelvin', system === 'imperial' ? 'fahrenheit' : 'celsius'))}${tempUnits}`
         cells[4].innerHTML = `${wxData.humidity}%`
-        cells[5].innerHTML = `${wxData.speed}${speedUnits}`
+        cells[5].innerHTML = `${Math.round(convertUnits(wxData.speed, 'milesPerHour', system === 'imperial' ? 'milesPerHour' : 'kilometersPerHour'))} ${speedUnits}`
         cells[6].innerHTML = `${wxData.deg}°`
         dispRandomGif(formatInput(wxData.description))
     })
@@ -78,4 +86,36 @@ function titleCase (string) {
         words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1)
     }
     return words.join(' ')
+}
+
+function convertUnits (val, fromUnits, toUnits) {
+    let ret = null
+    switch (fromUnits) {
+        case 'kelvin':
+            switch (toUnits) {
+                case 'fahrenheit':
+                    ret = (val - 273.15) * 9/5 + 32
+                    break
+                case 'celsius':
+                    ret = val - 273.15
+                    break
+                default:
+                    ret = val
+                    break
+            }
+            break
+        case 'milesPerHour':
+            switch (toUnits) {
+                case 'kilometersPerHour':
+                    ret = val * 1.609
+                    break
+                default:
+                    ret = val
+                    break
+            }
+            break
+        default:
+            break
+    }
+    return ret
 }
